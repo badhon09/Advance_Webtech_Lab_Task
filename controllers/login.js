@@ -7,9 +7,9 @@ router.get('/', (req, res)=>{
 
 router.post('/', (req, res)=>{
 	var userlist = [
-		["nur","123"],
-		["emon","456"],
-		["nayeem","789"]
+		["badhon","123"],
+		["alamin","456"],
+		["pranto","789"]
 	]
 	var loggedin = false;
 

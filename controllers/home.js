@@ -1,46 +1,36 @@
-var express = require('express');
-//var user = require.main.require('./models/user-model');
-var router = express.Router();
+const express 	= require('express');
+const router 	= express.Router();
 
-
-router.get('*', function(req, res, next){
-	if(req.session.un != null){
-		next();
+router.get('/', (req, res)=>{
+	
+	if(req.cookies['uname'] != null){
+		res.render('home/index', {name: 'alamin', id:'123'});		
 	}else{
 		res.redirect('/login');
 	}
 });
 
-router.get('/', function(req, res){
-	res.render('home/index');
-});
 
-router.get('/user_list', function(req, res){
-	user.getAll(function(results){
-		res.render('home/userList', {userList: results});
-	});
-});
+router.get('/userlist', (req, res)=>{
 
-router.get('/edit/:id', function(req, res){
-	user.getById(req.params.id, function(result){
-		res.render('home/edit', {user: result[0]});
-	});
-});
+	if(req.cookies['uname'] != ""){
 
-router.post('/edit/:id', function(req, res){
-	var data = {
-		id: req.params.id,
-		username: req.body.username,
-		password: req.body.password
+		var students = [
+			['1', 'alamin', 'abc@gmail.com', '1243'],
+			['2', 'pqr', 'pqr@gmail.com', '1243'],
+			['3', 'xyz', 'xyz@gmail.com', '1243']
+		];
+
+		res.render('home/userlist', {users: students});		
+	}else{
+		res.redirect('/login');
 	}
-	user.update(data, function(status){
-		if(status){
-			res.redirect('/home/user_list');
-		}else{
-			res.redirect('/home/edit/'+req.params.id);
-		}
-	});
-
-});
+})
 
 module.exports = router;
+
+//url design eg. /logout -> get or post request
+//adding middleware to app.js
+//creating controller/router  eg. router.get(), router.post()
+//creating VIEWS
+//sending response -> json, ejs

@@ -1,60 +1,35 @@
-//DEC
-var express 		= require('express');
-var ejs 			= require('ejs');
-var bodyParser 		= require('body-parser');
-var expressSession 	= require('express-session');
-var cookieParser 	= require('cookie-parser');
-var login 			= require('./controllers/login');
-var logout 			= require('./controllers/logout');
-var home 			= require('./controllers/home');
-var app 			= express();
+//declaration
+const express 			= require('express');	
+const bodyParser 		= require('body-parser');
+const exSession 		= require('express-session');
+const cookieParser 		= require('cookie-parser');
+const login				= require('./controllers/login');
+const logout			= require('./controllers/logout');
+const home				= require('./controllers/home');
+const user				= require('./controllers/user');
+const app				= express();
+const port				= 3000;
 
-
-//CONFIG
+//configuration
 app.set('view engine', 'ejs');
 
-
-//MIDDLEWARE
-app.use(bodyParser.urlencoded({'extended': false}));
-app.use(expressSession({secret: 'my top secret password', saveUninitialized: true, resave: false}));
+//middleware
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
-app.use('/xyz', express.static('pqr'));
+app.use(exSession({secret: 'secret value', saveUninitialized: true, resave: false}));
+
 
 app.use('/login', login);
-app.use('/logout', logout);
 app.use('/home', home);
+app.use('/logout', logout);
+app.use('/user', user);
 
-
-
-//ROUTING
-app.get('/', function(req, res){
-	res.send('Welcome to express web server...');
+//router
+app.get('/', (req, res)=>{
+	res.send('Welcome');
 });
 
-
-app.get('/setcookie', function(req, res){
-	res.cookie('my_cookie', 'sdhdgshjdbahdbahjsdbshbd');
-	res.send('done!');
+//server startup
+app.listen(port, (error)=>{
+	console.log('server strated at '+port);
 });
-
-app.get('/viewcookie', function(req, res){
-	
-	res.send(req.cookies['my_cookie']);
-});
-
-
-app.get('/rmcookie', function(req, res){
-	res.clearCookie('my_cookie');
-	res.send('removed!');
-});
-
-
-
-
-
-//SERVER STARTUP
-app.listen(3000, function(){
-	console.log('Server started at 3000....');
-})
-
-

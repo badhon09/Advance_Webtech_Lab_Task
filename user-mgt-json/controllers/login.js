@@ -1,4 +1,5 @@
 const express 	= require('express');
+const fs			= require('fs');
 const router 	= express.Router();
 
 router.get('/', (req, res)=>{
@@ -6,18 +7,16 @@ router.get('/', (req, res)=>{
 });
 
 router.post('/', (req, res)=>{
-	var userlist = [
-		["badhon","123"],
-		["alamin","456"],
-		["pranto","789"]
-	]
+	var data=fs.readFileSync('./controllers/userlist.json', 'utf8');
+	var userlist=JSON.parse(data);
+	req.session.uid = '3';
 	var loggedin = false;
 
 	userlist.forEach(function(user){
-		if(req.body.username == user[0] && req.body.password == user[1]){
+		if(req.body.username == user.username && req.body.password == user.password){
 			loggedin = true;
 		}
-	})
+	});
 
 	if(loggedin){
 		res.cookie('uname', req.body.username);
